@@ -1,0 +1,32 @@
+// 境界の定義 (単位円), いわゆる正の向き
+border Gamma(t=0,2*pi) { x=cos(t); y=sin(t); }
+// 三角形要素分割を生成 (境界を50に分割) 
+mesh Th = buildmesh(Gamma(50));
+plot(Th,ps="mesh.eps");
+plot(Th,wait=1);
+// 有限要素空間は P1 (区分的１次多項式) 要素
+fespace Vh(Th,P1);
+Vh u,v;
+// Poisson 方程式 -△u=f の右辺
+func f = x*y;
+// 現在時刻をメモ
+real start = clock();
+// 問題を解く
+solve Poisson(u,v)
+ = int2d(Th)(dx(u)*dx(v)+dy(u)*dy(v))-int2d(Th)(f*v)
+   +on(Gamma,u=0);
+// 可視化
+plot(u,ps="poisson-disk.eps");
+plot(u);
+//
+{
+  ofstream ug("u-g.txt");
+  for (int i=0; i<Th.nt; i++) {
+    for (int j=0; j<3; j++) {
+      ug << Th[i][j].x << " " << Th[i][j].y << " " << u[][Vh(i,j)]<<endl;
+    }
+    ug << Th[i][0].x << " " << Th[i][0].y << " " << u[][Vh(i,0)]<<"\n\n\n";
+   }
+}
+// 計算時間を表示
+cout << " CPU time= " << clock() - start << endl;

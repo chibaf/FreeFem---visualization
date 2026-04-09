@@ -27,5 +27,6 @@ plot([xx, yy], wait=true);
 }
 
 // Calls the gnuplot command, waits 5 seconds and generates a postscript plot (UNIX ONLY)
-exec("echo 'plot \"plot.gp\" w l \n pause 5 \n set term postscript \n set output \"gnuplot.eps\" \n replot \n quit' | gnuplot");
+//exec("echo 'plot \"plot.gp\" w l \n pause 5 \n set term postscript \n set output \"gnuplot.eps\" \n replot \n quit' | gnuplot");
+exec("echo 'plot \"plot.gp\" w l \n pause 5 \n set term postscript \n set output \"gnuplot.eps\" \n replot' | gnuplot");
 
